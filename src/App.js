@@ -16,6 +16,8 @@ import {
   List,
   InfiniteLoader,
 } from 'react-virtualized';
+import List from "@researchgate/react-intersection-list";
+import "intersection-observer";
 
 // You can import any component you want as a named export from 'react-virtualized', eg
 
@@ -41,6 +43,31 @@ function MaterialUITable({ data }) {
       ]}
       data={data}
     />
+  );
+}
+
+function IntersectionList() {
+  const itemsRenderer = (items, ref) => <ul ref={ref}>{items}</ul>;
+
+  const itemRenderer = (index, key) => (
+    <li style={styles.listItem} key={key}>{`Row ${index}`}</li>
+  );
+
+  const renderList = () => {
+    return (
+      <List
+        itemCount={5000}
+        itemsRenderer={itemsRenderer}
+        renderItem={itemRenderer}
+        pageSize={50}
+      />
+    );
+  };
+
+  return (
+    <div>
+      <div style={styles.list}>{renderList()}</div>
+    </div>
   );
 }
 
@@ -300,6 +327,14 @@ function App() {
         >
           AGGrid Table
         </button>
+        <button
+          style={{
+            marginLeft: 10,
+          }}
+          onClick={() => setTableType('Intersection List')}
+        >
+          Intersection List
+        </button>
       </div>
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -319,6 +354,7 @@ function App() {
       {showTableType === 'AntDesign' && <AntDesignTable data={data} />}
       {showTableType === 'Virtualised' && <VirtualisedTable data={data} />}
       {showTableType === 'AgGrid' && <AgGridTable />}
+      {showTableType === "Intersection List" && <IntersectionList />}
     </div>
   );
 }
